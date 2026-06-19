@@ -38,8 +38,5 @@ checkpoint=InMemorySaver()
 #compile graph
 chatbot=graph.compile(checkpointer=checkpoint)
 
-initial_state={'messages':[HumanMessage(content='who i am?')]}
 
-CONFIG={'configurable':{'thread_id':'1'}}
 
-print(chatbot.invoke(initial_state,config=CONFIG)['messages'][-1].content)
