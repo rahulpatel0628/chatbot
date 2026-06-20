@@ -3,7 +3,7 @@ import uuid
 
 import streamlit as st
 
-from langchain_core.messages import HumanMessage
+from langchain_core.messages import HumanMessage,AIMessage
 
 from langgraph_backend import chatbot,checkpointer
 
@@ -129,12 +129,15 @@ if user_input:
     config = {
         "configurable": {
             "thread_id": st.session_state.thread_id
-        }
+        },
+        'metadata':{
+            "thread_id": st.session_state.thread_id
+        },
+        'run_name':'chat_turn'
     }
 
     with st.chat_message("assistant"):
-        response = st.write_stream(
-            chunk.content
+        def only_ai_messages():
             for chunk, metadata in chatbot.stream(
                 {
                     "messages": [
@@ -145,10 +148,11 @@ if user_input:
                 },
                 config=config,
                 stream_mode="messages"
-            )
-            if hasattr(chunk, "content")
-            and chunk.content
-        )
+            ):
+                if isinstance(chunk,AIMessage):
+                    yield chunk.content
+        
+        response=st.write_stream(only_ai_messages())
 
     st.session_state.message_history.append(
         {
