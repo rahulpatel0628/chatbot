@@ -41,5 +41,5 @@ pip install streamlit langchain langchain-groq langchain-huggingface langgraph f
 ### 3. Run the Application
 Launch the local web server using Streamlit:
 ```bash
-streamlit run frontend.py
+streamlit run app.py
 ```
